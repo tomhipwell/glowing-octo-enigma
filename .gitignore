@@ -102,3 +102,19 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# terraform
+.terraform
+
+# mac osx
+.DS_Store
+
+# airflow
+logs
+airflow-webserver.pid
+airflow.cfg
+unittests.cfg
+
+# vs code
+.code-workspace
+.vscode

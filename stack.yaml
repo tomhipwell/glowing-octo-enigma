@@ -1,0 +1,11 @@
+version: "2"
+services:
+  airflow_backend:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - 5432:5432
