@@ -13,7 +13,7 @@ checks:
 	
 	flake8 --exclude=.env,venv --show-source --statistics --count --max-complexity=5
 
-	mypy airflow \
+	mypy -p airflow \
     --ignore-missing-imports \
     --disallow-untyped-calls \
     --disallow-untyped-decorators \

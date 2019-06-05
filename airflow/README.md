@@ -24,8 +24,8 @@ source .env/bin/activate
 To get Airflow up and running locally, first set the AIRFLOW_HOME environment variable:
 
 ```shell
-# use an absolute file path here rather than a relative path, where workspace is pwd
-export AIRFLOW_HOME=$WORKSPACE/airflow
+# use an absolute file path here rather than a relative path, where workspace is pwd, and assuming you are in the right directory :)
+export AIRFLOW_HOME=$(pwd)
 ```
 
 Install apache-airflow with the correct dependencies. We use LocalExecutor for task execution and postgres as our backend when testing locally:
@@ -38,7 +38,7 @@ pip3 install apache-airflow[postgres]
 We've written a docker-compose file which will start a container running postgres to use as our backend:
 
 ```shell
-docker-compose -f stack.yaml up -d
+docker-compose up -d
 ```
 
 Initialize the database:

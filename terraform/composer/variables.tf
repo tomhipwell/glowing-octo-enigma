@@ -11,17 +11,13 @@ variable "project_id" {
 }
 
 variable "region" {
-  default     = "europe-west2"
+  default     = "europe-west1"
   description = "Default region for all terraform controlled resources."
 }
 
 variable "zone" {
-  default     = "europe-west2-c"
+  default     = "europe-west1-c"
   description = "Default zone for all terraform controlled resources."
-}
-
-variable "additional_zones" {
-  default = ["europe-west2-a", "europe-west2-b"]
 }
 
 variable "email" {

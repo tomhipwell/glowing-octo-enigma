@@ -8,6 +8,12 @@ resource "google_project" "project" {
   name                = "${var.project_name}"
   project_id          = "${var.project_id}"
   auto_create_network = true
+
+  lifecycle {
+    ignore_changes = [
+      "billing_account",
+    ]
+  }
 }
 
 resource "google_project_services" "project" {

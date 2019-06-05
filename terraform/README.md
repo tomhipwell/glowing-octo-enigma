@@ -1,5 +1,11 @@
 # Terraform
 
+## Billing
+
+This project uses billed features on GCP. If you don't want to be charged, remember to tear down the environment once you are done with your development. If you'd like to enable billing, see the subsection below ('Enabling Billing').
+
+Note terraform apply will fail the first time it is run unless billing is enabled for the project you create.
+
 ## Getting Started
 
 Temporaily set your gcloud credentials gcloud auth application-default login:
@@ -8,13 +14,19 @@ Temporaily set your gcloud credentials gcloud auth application-default login:
 gcloud auth application-default login
 ```
 
+The above command will also print to std out a path to a json file, set the google application credentials environment variable used by terraform:
+
+```shell
+export GOOGLE_APPLICATION_CREDENTIALS=~/path/to/my/credentials.json
+```
+
 Set your working directory to ./terraform and run:
 
 ```shell
 terraform init
 ```
 
-This writes a terraform statefile locally on your machine. Note, if you want to productionize this codebase, you might want to move your stafile to be stored in a Cloud Storage Bucket, as then you can put in place a locking mechanism in place to prevent conflicts created by multiple peeps working on the codebase at the same time.
+This writes a terraform statefile locally on your machine. Note, if you want to productionize this codebase, you might want to move your stafile to be stored in a Cloud Storage Bucket, as then you can put in place a locking mechanism in place to prevent conflicts created by multiple peeps working on the codebase at the same time (see the subsection, "Backend").
 
 If you've previously init'd your dir locally, make sure you run:
 
@@ -38,6 +50,43 @@ terraform apply
 
 This will apply your changes in the environment you have selected. Note that terraform is built around the concept of immutable infrastructure. So if your resources already exist, they will always be set to the state defined in code. This means that if you go and make a manual change to a GCP project through the Cloud Console those changes will be lost the next time terraform apply is run.
 
+Bear in mind that Cloud Composer also takes a _long_ time to deploy due to the dependencies it needs to go and set up under the hood. So be patient.
+
+## Enabling Billing
+
+The terraform apply will fail the first time that you run the terraform codebase. This is because billing will not be enabled for the project you create. You can enable billing from the command line. First, check that you have a billing account configured:
+
+```shell
+# list your billing accounts
+gcloud alpha billing accounts list
+```
+
+If you don't use your google foo to figure out how to do this. Once you have a billing account configured, link it to your project:
+
+```shell
+# list your projects
+gcloud projects list
+# link your project
+gcloud alpha billing projects link my-project \
+      --billing-account 0X0X0X-0X0X0X-0X0X0X
+```
+
+This can also be done directly in terraform so that your terraform apply works first time. Just adjust the project resource block to include a billing attribute as follows (note the removal of the lifecycle block):
+
+```terraform
+data "google_billing_account" "acct" {
+  display_name = "my-billing-account"
+  open         = true
+}
+
+resource "google_project" "project" {
+  name                = "${var.project_name}"
+  project_id          = "${var.project_id}"
+  billing_account     = "${data.google_billing_account.acct.id}"
+  auto_create_network = true
+}
+```
+
 ## Outputs
 
 You can get output variables from Terraform using the command:
@@ -59,7 +108,7 @@ gcloud iam service-accounts keys create key.json
 export GOOGLE_APPLICATION_CREDENTIALS=key.json
 ```
 
-You can then switch to use the service account your shell (useful for testing):
+You can also switch to use the service account your shell (useful for testing):
 
 ```shell
 gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
