@@ -44,7 +44,7 @@ docker-compose up -d
 Switch into the airflow subdirectory and then initialize the database:
 
 ```shell
-cd ./airflow
+cd ./workflow
 airflow initdb
 ```
 

@@ -13,7 +13,7 @@ brew install docker
 brew cask install google-cloud-sdk
 ```
 
-## Airflow
+## Workflow
 
 Airflow related code, including a sample DAG and just enough information to get started with local development.
 

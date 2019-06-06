@@ -13,7 +13,7 @@ echo "Working with composer envrionment: $COMPOSER_NAME in project: $PROJECT_ID"
 gcloud composer environments storage dags import \
         --environment "${COMPOSER_NAME}" \
         --location "${LOCATION}" \
-        --source ./airflow/dags
+        --source ./workflow/dags
 
 #post deployment, check that the dag has deployed correctly.
 gcloud composer environments run "${COMPOSER_NAME}" list_dags \

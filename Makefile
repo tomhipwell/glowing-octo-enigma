@@ -3,7 +3,7 @@
 test:
 	which -s pytest || echo "pip3 install --user pytest"
 	which -s pytest-cov || echo "pip3 install --user pytest-cov"
-	python3 -m pytest --cov=airflow --cov-fail-under 75 tests
+	python3 -m pytest --cov=workflow --cov-fail-under 75 tests
 
 .PHONY: checks
 checks:
@@ -14,13 +14,13 @@ checks:
 	
 	flake8 --exclude=.env,venv --show-source --statistics --count --max-complexity=5
 
-	mypy -p airflow \
+	mypy -p workflow \
     --ignore-missing-imports \
     --disallow-untyped-calls \
     --disallow-untyped-decorators \
     --check-untyped-defs \
     --disallow-incomplete-defs
 
-	isort --recursive --check-only ./airflow
+	isort --recursive --check-only ./workflow
 
-	bandit -r airflow --exclude=.env,venv -lll -iii
+	bandit -r workflow --exclude=.env,venv -lll -iii
