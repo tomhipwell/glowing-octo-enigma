@@ -1,6 +1,6 @@
 # glowing-octo-enigma
 
-Everything you need to get started with developing on Airflow. This means sample Airflow DAGs and hooks/operators plus Terraform code to deploy a Cloud Composer environment, a deploy script you could hook into a CD pipeline and bundled documentation. Written for the Python London meetup.
+Everything you need to get started with developing on Airflow. This means sample Airflow DAGs and operators plus Terraform code to deploy a Cloud Composer environment, a deploy script you could hook into a CD pipeline and bundled documentation. Written for the Python London meetup.
 
 ## Getting Started
 

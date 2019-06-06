@@ -6,9 +6,11 @@ from tempfile import NamedTemporaryFile
 from typing import Dict
 
 from airflow.models import DAG, BaseOperator, TaskInstance, Variable
-from airflow.operators.python_operator import (BranchPythonOperator,
-                                               PythonOperator,
-                                               ShortCircuitOperator)
+from airflow.operators.python_operator import (
+    BranchPythonOperator,
+    PythonOperator,
+    ShortCircuitOperator,
+)
 from airflow.utils.decorators import apply_defaults
 from google.cloud import storage
 
@@ -17,7 +19,7 @@ seven_days_ago = datetime.combine(
 )
 
 default_args = {
-    "owner": "airflow",
+    "owner": "Airflow",
     # arbitrary in most cases
     # https://airflow.apache.org/faq.html#what-s-the-deal-with-start-date
     "start_date": seven_days_ago,

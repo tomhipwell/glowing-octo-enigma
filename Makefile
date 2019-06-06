@@ -2,6 +2,7 @@
 .PHONY: test
 test:
 	which -s pytest || echo "pip3 install --user pytest"
+	which -s pytest-cov || echo "pip3 install --user pytest-cov"
 	python3 -m pytest --cov=airflow --cov-fail-under 75 tests
 
 .PHONY: checks

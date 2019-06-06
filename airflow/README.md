@@ -35,15 +35,16 @@ export SLUGIFY_USES_TEXT_UNIDECODE=yes
 pip3 install apache-airflow[postgres]
 ```
 
-We've written a docker-compose file which will start a container running postgres to use as our backend:
+We've written a docker-compose file which will start a container running postgres to use as our backend. From the root directory of the project, run:
 
 ```shell
 docker-compose up -d
 ```
 
-Initialize the database:
+Switch into the airflow subdirectory and then initialize the database:
 
 ```shell
+cd ./airflow
 airflow initdb
 ```
 
@@ -53,10 +54,11 @@ You should see a airflow.cfg file created at this point in your home directory. 
 sql_alchemy_conn = postgresql+psycopg2://airflow:airflow@localhost/airflow
 ```
 
-While you're there, also stop the examples from loading.
+While you're there, also stop the examples from loading and don't pickle our xcoms.
 
 ```shell
 load_examples = False
+enable_xcom_pickling = False
 ```
 
 Once this is done, reset the airflow database and re-init:
@@ -66,11 +68,20 @@ airflow resetdb
 airflow initdb
 ```
 
+Set the variables required to run the DAG without your tasks erroring:
+
+```shell
+airflow variables -s airflow_project my-gcp-project-name
+airflow variables -s airflow_bucket my-gcs-bucket-name
+```
+
 Start the webserver, default port is 8080:
 
 ```shell
 airflow webserver -p 8080
 ```
+
+Then just head to localhost 8080. Add any variables which are defined in our DAG via the admin menu.
 
 Start the scheduler:
 
@@ -93,7 +104,5 @@ airflow list_tasks sample
 Run a sample task to try it out:
 
 ```shell
-airflow test sample_task 2019-05-31
+airflow test sample select_filename 2019-05-31
 ```
-
-Then just head to localhost 8080.

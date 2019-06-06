@@ -86,8 +86,9 @@ resource "google_composer_environment" "airflow" {
     node_count = "${var.primary_nodes}"
 
     node_config {
-      zone         = "${var.zone}"
-      machine_type = "n1-standard-1"
+      zone            = "${var.zone}"
+      machine_type    = "n1-standard-1"
+      service_account = "${google_service_account.airflow.name}"
     }
 
     software_config {
@@ -102,6 +103,10 @@ resource "google_composer_environment" "airflow" {
       }
     }
   }
+
+  depends_on = ["google_project_iam_member.composer-worker",
+    "google_storage_bucket_iam_member.bucket-admin",
+  ]
 }
 
 resource "google_storage_bucket" "composer_store" {
@@ -118,4 +123,22 @@ resource "google_storage_bucket" "composer_store" {
       age = "7"
     }
   }
+}
+
+resource "google_service_account" "airflow" {
+  account_id   = "composer"
+  display_name = "Service Account for Composer Environment"
+  project      = "${google_project_services.project.project}"
+}
+
+resource "google_project_iam_member" "composer-worker" {
+  role    = "roles/composer.worker"
+  member  = "serviceAccount:${google_service_account.airflow.email}"
+  project = "${google_project_services.project.project}"
+}
+
+resource "google_storage_bucket_iam_member" "bucket-admin" {
+  bucket = "${google_storage_bucket.composer_store.name}"
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.airflow.email}"
 }
