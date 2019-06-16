@@ -3,7 +3,7 @@
 test:
 	which -s pytest || echo "pip3 install --user pytest"
 	which -s pytest-cov || echo "pip3 install --user pytest-cov"
-	python3 -m pytest --cov=workflow --cov-fail-under 75 tests
+	python3 -m pytest --cov-config=.coveragerc --cov=workflow --cov-fail-under 70 workflow/tests
 
 .PHONY: checks
 checks:
@@ -23,4 +23,4 @@ checks:
 
 	isort --recursive --check-only ./workflow
 
-	bandit -r workflow --exclude=.env,venv -lll -iii
+	bandit -r workflow --exclude=.env,venv -lll -iii --skip=B101

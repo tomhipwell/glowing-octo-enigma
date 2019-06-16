@@ -110,9 +110,10 @@ resource "google_composer_environment" "airflow" {
 }
 
 resource "google_storage_bucket" "composer_store" {
-  name     = "${google_project_services.project.project}-bucket"
-  project  = "${google_project_services.project.project}"
-  location = "EU"
+  name          = "${google_project_services.project.project}-bucket"
+  project       = "${google_project_services.project.project}"
+  location      = "EU"
+  force_destroy = true
 
   lifecycle_rule {
     action {

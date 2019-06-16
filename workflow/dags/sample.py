@@ -1,21 +1,20 @@
+import datetime
 import logging
-from datetime import datetime, timedelta
-from random import choice
-from string import ascii_lowercase
-from tempfile import NamedTemporaryFile
+import random
+import string
+import tempfile
 from typing import Dict
 
 from airflow.models import DAG, BaseOperator, TaskInstance, Variable
-from airflow.operators.python_operator import (
-    BranchPythonOperator,
-    PythonOperator,
-    ShortCircuitOperator,
-)
+from airflow.operators.python_operator import (BranchPythonOperator,
+                                               PythonOperator,
+                                               ShortCircuitOperator)
 from airflow.utils.decorators import apply_defaults
 from google.cloud import storage
 
-seven_days_ago = datetime.combine(
-    datetime.today() - timedelta(7), datetime.min.time()
+seven_days_ago = datetime.datetime.combine(
+    datetime.datetime.today() - datetime.timedelta(7),
+    datetime.datetime.min.time(),
 )
 
 default_args = {
@@ -27,7 +26,7 @@ default_args = {
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
-    "retry_delay": timedelta(minutes=1),
+    "retry_delay": datetime.timedelta(minutes=1),
 }
 
 
@@ -49,22 +48,23 @@ class MoveToStorageOperator(BaseOperator):
         ti = context["ti"]
         filename = ti.xcom_pull(key="filename", task_ids="select_filename")
         bit_of_entropy = "".join(
-            choice(ascii_lowercase) for _ in range(4)  # nosec prg usage
+            random.choice(string.ascii_lowercase)  # nosec prg usage
+            for _ in range(4)
         )
         qualified_filename = f"{filename}_{bit_of_entropy}.txt"
         logging.info(f"Working with file: {qualified_filename}")
-        with NamedTemporaryFile("w") as tf:
+        with tempfile.NamedTemporaryFile("w") as tf:
             tf.write("Hello World!")
             tf.flush()
             blob = bucket.blob(f"landed/{qualified_filename}")
             blob.upload_from_filename(tf.name)
         logging.info(f"File uploaded to url: {blob.public_url}")
-        ti.xcom_push(key="blob_name", value=blob.name)
+        ti.xcom_push(key="blob_name", value=str(blob.name))
 
 
 def select_filename(**kwargs: TaskInstance) -> bool:
     """Choose a name for our file (or None), demonstrate xcom push."""
-    filename = choice(["foo", "bar", None])  # nosec for prg usage.
+    filename = random.choice(["foo", "bar", None])  # nosec for prg usage.
     if filename is not None:
         ti = kwargs["ti"]
         logging.info(f"Pushing file to workflow: {filename}")
