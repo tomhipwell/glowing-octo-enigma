@@ -45,7 +45,7 @@ idna==2.8
 importlib-metadata==0.17
 iso8601==0.1.12
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 json-merge-patch==0.2
 lockfile==0.12.2
 lxml==4.3.3
