@@ -84,7 +84,7 @@ pytzdata==2019.1
 PyYAML==5.1
 requests==2.22.0
 rope==0.14.0
-rsa==4.0
+rsa==4.1
 selenium==3.141.0
 setproctitle==1.1.10
 six==1.12.0
