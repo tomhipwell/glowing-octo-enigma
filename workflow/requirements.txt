@@ -48,7 +48,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 json-merge-patch==0.2
 lockfile==0.12.2
-lxml==4.3.3
+lxml==4.6.5
 Mako==1.0.11
 Markdown==2.6.11
 MarkupSafe==1.1.1
