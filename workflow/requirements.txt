@@ -56,7 +56,7 @@ mccabe==0.6.1
 more-itertools==7.0.0
 mypy==0.701
 mypy-extensions==0.4.1
-numpy==1.16.4
+numpy==1.22.0
 ordereddict==1.1
 packaging==19.0
 pandas==0.24.2
