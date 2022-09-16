@@ -49,7 +49,7 @@ Jinja2==2.10
 json-merge-patch==0.2
 lockfile==0.12.2
 lxml==4.3.3
-Mako==1.0.11
+Mako==1.2.2
 Markdown==2.6.11
 MarkupSafe==1.1.1
 mccabe==0.6.1
